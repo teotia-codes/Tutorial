@@ -3,6 +3,7 @@ package com.example.tutorial.ui.theme.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -20,33 +21,35 @@ import com.example.tutorial.ui.theme.QuoteX
 
 
 @Composable
-fun HomeScreen(modifier:Modifier = Modifier, data: Array<QuoteX>, onClick: () -> Unit) {
+fun HomeScreen(modifier:Modifier, data: Array<QuoteX>, onClick: () -> Unit) {
     
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    LazyVerticalGrid(
+        modifier = modifier,columns = GridCells.Fixed(2)) {
         items(data) { // Assuming you want to display 10 cards
          Quotes(qoute = it, onClick = {})
         }
     }
 }
-
 @Composable
 fun Quotes(qoute: QuoteX, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .clickable { onClick }
-            .padding(8.dp),
+            .clickable { onClick() }  // Corrected onClick syntax
+            .padding(8.dp)
+            .fillMaxWidth(),  // Ensure each card occupies full width of its container
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxSize()
                 .padding(16.dp)
         ) {
             Text(text = qoute.quote)
             HorizontalDivider()
-            Text(text = qoute.author, fontWeight = FontWeight.Bold)
-            // Add an Image composable here if you want todisplay an image
+            Text(
+                text = qoute.author,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
         }
     }
-
 }

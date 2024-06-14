@@ -5,14 +5,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tutorial.ui.theme.DataManager
@@ -20,6 +23,7 @@ import com.example.tutorial.ui.theme.TutorialTheme
 import com.example.tutorial.ui.theme.screens.HomeScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -29,6 +33,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         CoroutineScope(Dispatchers.IO).launch {
+            delay(10000)
             DataManager.load(applicationContext)
         }
         setContent {
@@ -46,10 +51,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun App(modifier: Modifier = Modifier) {
+fun App(modifier: Modifier ) {
     if (DataManager.isDataLoaded){
-        HomeScreen(data = DataManager.data) {
+        HomeScreen(data = DataManager.data, modifier = modifier) {
             
         }
     }
+    else{ 
+
+            CircularProgressIndicator(color = Color.Black)
+
+    }
+
 }
