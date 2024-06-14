@@ -1,5 +1,6 @@
 package com.example.tutorial
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,21 +15,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.tutorial.ui.theme.DataManager
 import com.example.tutorial.ui.theme.TutorialTheme
 import com.example.tutorial.ui.theme.screens.HomeScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("CoroutineCreationDuringComposition")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        CoroutineScope(Dispatchers.IO).launch {
+            DataManager.load(applicationContext)
+        }
         setContent {
             TutorialTheme {
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     topBar = { TopAppBar(title = { Text(text = "Quotes App", textAlign = TextAlign.Center)
                                                  },
                         ) }) { innerPadding ->
-                    HomeScreen(modifier = Modifier.padding(innerPadding))
+                  App(modifier = Modifier.padding(innerPadding))
 
                 }
             }
@@ -37,17 +46,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TutorialTheme {
-        Greeting("Android")
+fun App(modifier: Modifier = Modifier) {
+    if (DataManager.isDataLoaded){
+        HomeScreen(data = DataManager.data) {
+            
+        }
     }
 }
