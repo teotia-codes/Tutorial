@@ -26,21 +26,21 @@ import com.example.tutorial.ui.theme.QuoteX
 
 
 @Composable
-fun HomeScreen(modifier:Modifier, data: Array<QuoteX>, onClick: () -> Unit) {
+fun HomeScreen(modifier:Modifier, data: Array<QuoteX>, onClick: (quote: QuoteX) -> Unit) {
     
     LazyVerticalGrid(
         modifier = modifier,columns = GridCells.Fixed(2)) {
         items(data) { // Assuming you want to display 10 cards
-         Quotes(qoute = it, onClick = {})
+         Quotes(qoute = it, onClick = onClick)
 
         }
     }
 }
 @Composable
-fun Quotes(qoute: QuoteX, onClick: () -> Unit) {
+fun Quotes(qoute: QuoteX, onClick: (quote:QuoteX) -> Unit) {
     Card(
         modifier = Modifier
-            .clickable { onClick() }  // Corrected onClick syntax
+            .clickable { onClick(qoute) }  // Corrected onClick syntax
             .padding(8.dp)
             .fillMaxWidth(),  // Ensure each card occupies full width of its container
         elevation = CardDefaults.cardElevation(4.dp)

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -17,9 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.tutorial.ui.theme.DataManager
 import com.example.tutorial.ui.theme.TutorialTheme
+import com.example.tutorial.ui.theme.screens.DetailScreen
 import com.example.tutorial.ui.theme.screens.HomeScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,8 +52,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App(modifier: Modifier ) {
     if (DataManager.isDataLoaded){
-        HomeScreen(data = DataManager.data, modifier = modifier) {
-            
+        if (DataManager.currentPage.value == Pages.LISTING){
+            HomeScreen(data = DataManager.data, modifier = modifier) {
+               DataManager.switchPages(it)
+            }
+        }
+        else{
+           DataManager.currentQuote?.let {
+            DetailScreen(modifier = modifier, quote =DataManager.currentQuote!!)}
         }
     }
     else{ 
@@ -63,4 +68,9 @@ fun App(modifier: Modifier ) {
 
     }
 
+}
+
+enum class Pages{
+    LISTING,
+    DETAIL
 }
