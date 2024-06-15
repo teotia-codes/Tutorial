@@ -27,6 +27,7 @@ fun HomeScreen(modifier:Modifier, data: Array<QuoteX>, onClick: () -> Unit) {
         modifier = modifier,columns = GridCells.Fixed(2)) {
         items(data) { // Assuming you want to display 10 cards
          Quotes(qoute = it, onClick = {})
+
         }
     }
 }
