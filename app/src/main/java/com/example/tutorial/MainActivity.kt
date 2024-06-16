@@ -3,6 +3,8 @@ package com.example.tutorial
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
+import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +16,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -24,7 +27,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.example.tutorial.ui.theme.DataManager
 import com.example.tutorial.ui.theme.TutorialTheme
 import com.example.tutorial.ui.theme.screens.DetailScreen
@@ -91,9 +97,26 @@ fun App(modifier: Modifier ) {
             }
         }
     }*/
-  Media()
+  Keyboard()
+    TextField(value = "", onValueChange = {})
+
 }
 
+@Composable
+fun Keyboard(modifier: Modifier = Modifier) {
+    val view = LocalView.current
+    DisposableEffect(key1 = Unit) {
+        val listener = ViewTreeObserver.OnGlobalLayoutListener {
+            val insets = ViewCompat.getRootWindowInsets(view)
+            val isKeyboardOpen = insets?.isVisible(WindowInsetsCompat.Type.ime())
+            Log.d("PRISHU", isKeyboardOpen.toString())
+        }
+        view.viewTreeObserver.addOnGlobalLayoutListener (listener)
+        onDispose {
+            view.viewTreeObserver.removeOnGlobalLayoutListener(listener)
+        }
+    }
+}
 @Composable
 fun Media(modifier: Modifier = Modifier) {
     val context = LocalContext.current
