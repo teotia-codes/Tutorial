@@ -1,6 +1,7 @@
 package com.example.tutorial
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,12 +16,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import com.example.tutorial.ui.theme.DataManager
 import com.example.tutorial.ui.theme.TutorialTheme
@@ -30,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("CoroutineCreationDuringComposition")
@@ -74,7 +78,7 @@ fun App(modifier: Modifier ) {
             CircularProgressIndicator(color = Color.Black)
 
     }*/
-    var darkTheme by remember {
+   /* var darkTheme by remember {
             mutableStateOf(false)
     }
     TutorialTheme(darkTheme) {
@@ -86,8 +90,21 @@ fun App(modifier: Modifier ) {
                 }
             }
         }
-    }
+    }*/
+  Media()
+}
 
+@Composable
+fun Media(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    DisposableEffect(key1 = Unit) {
+        val mediaPlayer = MediaPlayer.create(context, R.raw.legend)
+        mediaPlayer.start()
+        onDispose {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
+    }
 }
 
 enum class Pages{
