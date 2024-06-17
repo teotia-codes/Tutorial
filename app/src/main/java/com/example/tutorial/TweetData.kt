@@ -1,6 +1,6 @@
 package com.example.tutorial
 
-data class Tweet(
+data class TweetData(
     val category: String,
     val text: String
 )
