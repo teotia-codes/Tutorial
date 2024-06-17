@@ -71,8 +71,19 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.material3)
     implementation(libs.androidx.material3.android)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+
+    implementation ("com.google.dagger:hilt-android:2.51.1")
+    kapt ("com.google.dagger:hilt-compiler:2.51.1")
+
+    // For instrumentation tests
+    androidTestImplementation  ("com.google.dagger:hilt-android-testing:2.51.1")
+    kaptAndroidTest ("com.google.dagger:hilt-compiler:2.51.1")
+
+    // For local unit tests
+    testImplementation ("com.google.dagger:hilt-android-testing:2.51.1")
+    kaptTest ("com.google.dagger:hilt-compiler:2.51.1")
+
+
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.kotlinx.coroutines.android)
@@ -81,7 +92,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.retrofit2.converter.gson)
 }
 kapt {
     correctErrorTypes = true

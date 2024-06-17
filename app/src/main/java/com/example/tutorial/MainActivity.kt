@@ -41,28 +41,34 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.tutorial.ui.theme.DataManager
-import com.example.tutorial.ui.theme.TutorialTheme
-import com.example.tutorial.ui.theme.screens.DetailScreen
-import com.example.tutorial.ui.theme.screens.HomeScreen
+import com.example.tutorial.api.TweetsApi
+
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @SuppressLint("CoroutineCreationDuringComposition")
+    @Inject
+    lateinit var tweetApi: TweetsApi
+//    @SuppressLint("CoroutineCreationDuringComposition")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    GlobalScope.launch {
+       var response =  tweetApi.getCategories()
+        Log.d("Test", response.body().toString())
+    }
         enableEdgeToEdge()
 /*CoroutineScope(Dispatchers.IO).launch {
             delay(10000)
             DataManager.load(applicationContext)
         }*/
         setContent {
-            App(modifier = Modifier)
 
                /* Scaffold(modifier = Modifier.fillMaxSize(),
                     topBar = { TopAppBar(title = { Text(text = "Quotes App", textAlign = TextAlign.Center)
@@ -74,7 +80,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
+/*
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun App(modifier: Modifier ) {
@@ -164,4 +170,4 @@ fun Loader(modifier: Modifier ) {
 enum class Pages{
     LISTING,
     DETAIL
-}
+}*/
