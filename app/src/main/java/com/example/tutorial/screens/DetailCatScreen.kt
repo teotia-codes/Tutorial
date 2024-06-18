@@ -16,9 +16,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tutorial.viewmodel.DetailViewModel
 
 @Composable
-fun DetailCatScreen(modifier: Modifier = Modifier) {
-    val detailViewModel: DetailViewModel = viewModel()
-    val tweet = detailViewModel.tweets.collectAsState()
+fun DetailCatScreen(modifier: Modifier = Modifier, viewModel: DetailViewModel) {
+    val tweet = viewModel.tweets.collectAsState()
     LazyColumn(
         modifier = modifier.systemBarsPadding()
     ){

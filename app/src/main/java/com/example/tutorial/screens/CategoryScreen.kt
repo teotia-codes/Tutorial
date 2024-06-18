@@ -1,6 +1,7 @@
 package com.example.tutorial.screens
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,11 +25,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.tutorial.R
 import com.example.tutorial.viewmodel.CatViewModel
 
 @Composable
-fun CategoryScreen( viewModel: CatViewModel) {
+fun CategoryScreen( viewModel: CatViewModel, onClick: (category: String) -> Unit) {
     val categories = viewModel.categories.collectAsState()
   LazyVerticalGrid(
       modifier = Modifier.systemBarsPadding(),
@@ -37,20 +39,25 @@ fun CategoryScreen( viewModel: CatViewModel) {
       verticalArrangement = Arrangement.SpaceAround
   ) {
       items(categories.value.distinct()){
-          CategoryItem(category = it)
+          CategoryItem(category = it, onClick = onClick)
       }
 
   }
 }
 
 @Composable
-fun CategoryItem(modifier: Modifier = Modifier, category: String) {
+fun CategoryItem(onClick: (category: String) -> Unit,
+    modifier: Modifier = Modifier, category: String, ) {
     Box (
         modifier = modifier
             .padding(4.dp)
             .size(160.dp)
             .clip(RoundedCornerShape(8.dp))
-            .paint(painter = painterResource(id = R.drawable.bg),
+            .clickable {
+                onClick(category)
+            }
+            .paint(painter = painterResource(id = R.drawable.bg)
+                ,
                 contentScale = ContentScale.Crop)
             .border(1.dp, Color.Gray),
         contentAlignment = Alignment.BottomCenter){
