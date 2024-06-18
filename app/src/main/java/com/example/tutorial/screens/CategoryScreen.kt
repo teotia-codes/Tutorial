@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -12,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -32,17 +34,28 @@ import com.example.tutorial.viewmodel.CatViewModel
 @Composable
 fun CategoryScreen( viewModel: CatViewModel, onClick: (category: String) -> Unit) {
     val categories = viewModel.categories.collectAsState()
-  LazyVerticalGrid(
-      modifier = Modifier.systemBarsPadding(),
-      columns = GridCells.Fixed(2),
-      contentPadding = PaddingValues(8.dp),
-      verticalArrangement = Arrangement.SpaceAround
-  ) {
-      items(categories.value.distinct()){
-          CategoryItem(category = it, onClick = onClick)
-      }
+    if(categories.value.isEmpty()){
+        Box(
+            modifier = Modifier.fillMaxSize(1f),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+    else{
+        LazyVerticalGrid(
+            modifier = Modifier.systemBarsPadding(),
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
+            items(categories.value.distinct()){
+                CategoryItem(category = it, onClick = onClick)
+            }
 
-  }
+        }
+    }
+
 }
 
 @Composable
@@ -56,9 +69,10 @@ fun CategoryItem(onClick: (category: String) -> Unit,
             .clickable {
                 onClick(category)
             }
-            .paint(painter = painterResource(id = R.drawable.bg)
-                ,
-                contentScale = ContentScale.Crop)
+            .paint(
+                painter = painterResource(id = R.drawable.bg),
+                contentScale = ContentScale.Crop
+            )
             .border(1.dp, Color.Gray),
         contentAlignment = Alignment.BottomCenter){
        Text(text = category, fontSize = 22.sp, color = Color.White,
