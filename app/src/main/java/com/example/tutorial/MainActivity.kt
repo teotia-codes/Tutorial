@@ -2,7 +2,6 @@ package com.example.tutorial
 
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,20 +11,19 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 
 
-import com.example.tutorial.api.TweetsApi
 import com.example.tutorial.screens.CategoryScreen
 import com.example.tutorial.screens.DetailCatScreen
 import com.example.tutorial.viewmodel.CatViewModel
+import com.example.tutorial.viewmodel.DetailViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -151,11 +149,16 @@ fun App(modifier: Modifier) {
         startDestination = "category"
     ) {
         composable(route = "category") {
-            val viewModel : CatViewModel = hiltViewModel()
-            CategoryScreen(viewModel = viewModel)
+            val viewModel: CatViewModel = hiltViewModel()
+            CategoryScreen(viewModel = viewModel) {
+                navController.navigate("detailscreen/${it}")
+            }
         }
-        composable(route = "detailscreen") {
-            DetailCatScreen()
+        composable(route = "detailscreen/{cat}", arguments = listOf(navArgument("cat") {
+            type = NavType.StringType
+        })) {
+            val viewModel: DetailViewModel = hiltViewModel()
+            DetailCatScreen(viewModel = viewModel)
         }
     }
 }
